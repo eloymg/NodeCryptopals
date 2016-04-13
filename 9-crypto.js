@@ -19,5 +19,4 @@ function pkcspadding(str,bytes){
 		return arr;
 }
 var str = new Buffer("010203040506070809101112131415","hex")
-var a = pkcspadding(str,19);
-console.log(a)
+var a = pkcspadding(str,6);
