@@ -23,12 +23,12 @@ function freq(str){
 
 var varfreq2 = 1000;
 for (j=16;j<255;j++){
-    
+    if(j<16){zero="0";}else{zero="";}
  	xvar = new Buffer(j.toString(16),"hex");
-	console.log(xores(str,xvar)+" char:"+xvar.toString("hex"));
-	console.log(freq(xores(str,xvar)));
+	//console.log(xores(str,xvar)+" char:"+xvar.toString("hex"));
+	//console.log(freq(xores(str,xvar)));
 	varfreq1 = freq(xores(str,xvar));
-	if(varfreq1<varfreq2){varfreq2=varfreq1;char=xvar.toString("hex");}
+	if(varfreq1<varfreq2){varfreq2=varfreq1;char=xvar.toString("hex");strres=xores(str, xvar);}
 	
 	}
-console.log("char:"+char)
+console.log(strres+"|char:"+char)
