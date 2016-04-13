@@ -41,13 +41,16 @@ function xores(var1,var2){
 }
 
     var iv = Buffer("00000000000000000000000000000000","hex")
-    
+
 
 fs.readFile('10.txt', 'utf8', function (err,data) {
 
 		data = new Buffer(data,"base64");
-		block1 = pkcspaddingarr(data,16)
-		dec1 = new Buffer(aesdecrypt(block1[0],'YELLOW SUBMARINE'),"hex")
-		console.log(xores(dec1,iv));
-
+		arr = pkcspaddingarr(data,16)
+		for (j=0;j<arr.length;j++){
+			dec = new Buffer(aesdecrypt(arr[j],'YELLOW SUBMARINE'),"hex");
+			res = xores(dec,iv);
+			console.log(res);
+			iv = arr[j];
+		}
 	});
