@@ -76,16 +76,14 @@ this.pkcspaddingarr = function (str,bytes){
 this.aes128ecb_decrypt = function (data,key){
 		var decipher = crypto.createDecipheriv('aes-128-ecb',key,'');
 		decipher.setAutoPadding(false);
-		var decrypted = decipher.update(data, 'base64', 'hex');
-		decrypted += decipher.final('hex');
-		return new Buffer(decrypted,'hex');
+		var decrypted = Buffer.concat([decipher.update(data),decipher.final()]);
+		return decrypted;
 }
 this.aes128ecb_encrypt = function (data,key){
 		var cipher = crypto.createCipheriv('aes-128-ecb',key,'');
 		cipher.setAutoPadding(false);
-		var crypted = cipher.update(data, 'base64', 'base64');
-		crypted += cipher.final('base64');
-		return new Buffer(crypted,'base64');
+		var crypted = Buffer.concat([cipher.update(data),cipher.final()]);
+		return crypted;
 		
 }
 this.aes128cbc_decrypt = function (data,key,iv){
