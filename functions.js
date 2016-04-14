@@ -55,7 +55,24 @@ this.freqanalizer = function (str){
 	}
 	return [strres,char,varfreq2]
 }
+this.pkcspaddingarr = function (str,bytes){
 
+		var arr = [];
+		str = str.toString('hex')
+		
+		for(i=0;i<str.length/(bytes*2);i++){
+		
+			var buf = new Buffer(str.substring(i*bytes*2, i*bytes*2+bytes*2),'hex')
+			arr.push(buf)
+		}
+		lastlen = arr[arr.length-1].length
+		
+		if(bytes-lastlen<=16){zero='0';}else{zero='';}
+		
+		padding = zero+(bytes-lastlen).toString(16);
+		arr[arr.length-1]=new Buffer(arr[arr.length-1].toString('hex')+padding.repeat(bytes-lastlen),'hex');
+		return arr;
+}
 this.aes128ecb_decrypt = function (data,key){
 		var decipher = crypto.createDecipheriv('aes-128-ecb',key,'');
 		decipher.setAutoPadding(false);
@@ -65,8 +82,34 @@ this.aes128ecb_decrypt = function (data,key){
 }
 this.aes128ecb_encrypt = function (data,key){
 		var cipher = crypto.createCipheriv('aes-128-ecb',key,'');
+		cipher.setAutoPadding(false);
 		var crypted = cipher.update(data, 'base64', 'base64');
 		crypted += cipher.final('base64');
 		return new Buffer(crypted,'base64');
 		
+}
+this.aes128cbc_decrypt = function (data,key,iv){
+		key.toString('ascii');
+		block = iv
+		arr = this.pkcspaddingarr(data,16)
+		res = [];
+		for (j=0;j<arr.length;j++){
+			dec =this.aes128ecb_decrypt(arr[j],key);
+			res.push(this.xor(dec,block));
+			block = arr[j];
+		}
+		return Buffer.concat(res)
+}
+this.aes128cbc_encrypt = function (data,key,iv){
+		key.toString('ascii');
+		block = iv
+		arr = this.pkcspaddingarr(data,16)
+		res = [];
+		for (j=0;j<arr.length;j++){
+			prexor = this.xor(arr[j],block)
+			enc = this.aes128ecb_encrypt(prexor,key)
+			res.push(enc);
+			block = enc;
+		}
+		return Buffer.concat(res)
 }
