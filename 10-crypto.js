@@ -40,7 +40,7 @@ function xores(var1,var2){
 	}
 	return st;
 }
-function aes128CBCdecrypt(data,key,iv){
+function aes128cbc_decrypt(data,key,iv){
 		block = Buffer(iv,'hex')
 		arr = pkcspaddingarr(data,16)
 		res = [];
@@ -52,17 +52,18 @@ function aes128CBCdecrypt(data,key,iv){
 		return Buffer.concat(res)
 }
 
-function aes128CBCencrypt(data,key,iv){
+function aes128cbc_encrypt(data,key,iv){
 		block = Buffer(iv,'hex')
 		arr = pkcspaddingarr(data,16)
-		res = '';
+		res = [];
 		for (j=0;j<arr.length;j++){
-			prexor = new Buffer(xores(arr[j],block),'ascii');
-			enc = new Buffer(aesencrypt(prexor,key).toString('base64'),'hex');
-			res += enc
-			block = new Buffer(xores(arr[j],block),'ascii');
+			prexor = functions.xor(arr[j],block)
+			enc = functions.aes128ecb_encrypt(prexor,key)
+			res.push(enc);
+			console.log(enc);
+			block = enc;
 		}
-		return res
+		return Buffer.concat(res)
 }
 
     
@@ -71,6 +72,6 @@ function aes128CBCencrypt(data,key,iv){
 fs.readFile('10.txt', 'utf8', function (err,data) {
 		data = new Buffer(data,'base64');
 		data2 = new Buffer('hola que tal','ascii')
-		console.log(aes128CBCdecrypt(data,'YELLOW SUBMARINE','00000000000000000000000000000000').toString('ascii'));
-		//console.log(aes128CBCencrypt(data2,'YELLOW SUBMARINE','00000000000000000000000000000000'));
+		data3 = new Buffer(aes128cbc_decrypt(data,'YELLOW SUBMARINE','00000000000000000000000000000000').toString('ascii'),"ascii");
+		console.log(aes128cbc_encrypt(data3,'YELLOW SUBMARINE','00000000000000000000000000000000').toString("base64"));
 	});

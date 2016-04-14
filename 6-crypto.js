@@ -1,6 +1,13 @@
-function hammingdistance(str1,str2){
+var functions = require('./functions.js')
 
-	b1 = new Buffer(str1,"ascii");
-	b2 = new Buffer(str2,"ascii");
+data1 = new Buffer("this is a test","ascii");
+data2 = new Buffer("wokka wokka!!!","ascii");
 
-}
+console.log(functions.hammingdistance(data1,data2));
+
+fs.readFile('6.txt', 'utf8', function (err,data) {
+
+		data = new Buffer(data,'base64');
+		
+
+	});

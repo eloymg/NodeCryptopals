@@ -1,4 +1,13 @@
 var crypto = require('crypto')
+this.hammingdistance = function(str1,str2){
+	res = this.xor(str1,str2);
+	count = 0;
+	for (i=0;i<res.length;i++){
+		//console.log(res[i]);
+		count += parseInt(res[i]).toString(2).match(/1/g).length
+	}
+	return count
+};
 this.xor = function(var1,var2){
 				var st=[];
 				for (i=0;i<var1.length;i++){
@@ -46,6 +55,7 @@ this.freqanalizer = function (str){
 	}
 	return [strres,char,varfreq2]
 }
+
 this.aes128ecb_decrypt = function (data,key){
 		var decipher = crypto.createDecipheriv('aes-128-ecb',key,'');
 		decipher.setAutoPadding(false);
@@ -55,8 +65,8 @@ this.aes128ecb_decrypt = function (data,key){
 }
 this.aes128ecb_encrypt = function (data,key){
 		var cipher = crypto.createCipheriv('aes-128-ecb',key,'');
-		var crypted = cipher.update(data, 'base64', 'hex');
-		crypted += cipher.final('hex');
-		return new Buffer(crypted,'hex');
+		var crypted = cipher.update(data, 'base64', 'base64');
+		crypted += cipher.final('base64');
+		return new Buffer(crypted,'base64');
 		
 }
