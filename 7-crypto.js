@@ -1,17 +1,11 @@
-var crypto = require('crypto')
+var functions = require('./functions.js')
 fs = require('fs')
 
-function aesdecrypt(data,key){
-		var decipher = crypto.createDecipheriv('aes-128-ecb',key,'');
-		decipher.setAutoPadding(false);
-		var decrypted = decipher.update(data, 'base64', 'utf8');
-		decrypted += decipher.final();
-		return decrypted;
-}
 
 fs.readFile('7.txt', 'utf8', function (err,data) {
 
-		console.log(aesdecrypt(data,'YELLOW SUBMARINE'));
+		data = new Buffer(data,'base64');
+		console.log(functions.aes128ecb_decrypt(data,'YELLOW SUBMARINE').toString('ascii'));
 
 	});
 

@@ -15,7 +15,7 @@ require('fs').readFileSync('8.txt').toString().split('\n').forEach(function (lin
 	num++;
 	uniqs1=arr.unique().length;
 	if(uniqs1<uniqs2){numf=num;uniqs2=uniqs1;}
-    //console.log("Linia:"+num+" "+arr.unique().length)
+    //console.log('Linia:'+num+' '+arr.unique().length)
 
 }) 
-console.log("Linia:"+numf)
+console.log('Linia:'+numf)
