@@ -199,3 +199,16 @@ this.byte_at_time_decryptor = function() {
     }
     return b
 }
+this.kv_parser = function (str) {
+
+strarray = str.split("&")
+var keyvalue = {};
+for (i in strarray) {
+  
+  res = strarray[i].split("=")
+  keyvalue[res[0]]=res[1]
+}
+
+return keyvalue
+
+}
