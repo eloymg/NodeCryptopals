@@ -1,8 +1,7 @@
 var functions = require('./functions')
+		data = new Buffer("Rollin' in my 5","ascii")
+	   data2 = new Buffer("Rollin' in my .","ascii")
+	  console.log(functions.byte_at_time(data));
+	  console.log(functions.byte_at_time(data2));
+	console.log(functions.byte_at_time_decryptor().toString('ascii'));
 
-str1 = new Buffer("aaaaaaaaaaaaaaRo","ascii");
-str2 = new Buffer("aaaaaaaaaaaaaaab","ascii");
-str3 = new Buffer("aaaaaaaaaaaaaaac","ascii");
-console.log(functions.byte_at_time(str1).toString('hex'));
-console.log(functions.byte_at_time(str2).toString('hex'));
-console.log(functions.byte_at_time(str3).toString('hex'));

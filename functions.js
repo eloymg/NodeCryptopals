@@ -132,49 +132,60 @@ this.aes128cbc_encrypt = function(data, key, iv) {
     }
     return Buffer.concat(res)
 }
-this.encryption_oracle = function(data) {
-
-    iv = new Buffer('00000000000000000000000000000000', 'hex');
-    key = crypto.randomBytes(16)
-    if (Math.random() > 0.5) {
-        return this.aes128cbc_encrypt(data, key, iv);
-        
-    } else {
-        return this.aes128ECB_encrypt(data, key);
-        
-    }
-
-}
 this.random_encryption = function(data) {
 
     iv = new Buffer('00000000000000000000000000000000', 'hex');
     key = crypto.randomBytes(16)
     if (Math.random() > 0.5) {
         return this.aes128cbc_encrypt(data, key, iv);
-        
+
     } else {
         return this.aes128ECB_encrypt(data, key);
-        
+
     }
 
 }
-this.encryption_oracle = function(data){
-	if(Buffer.compare(data.slice(0,16),data.slice(16,32))==0){
-		return true
-	}else{
-		return false
-	}
+this.encryption_oracle = function(data) {
+    if (Buffer.compare(data.slice(0, 16), data.slice(16, 32)) == 0) {
+        return true
+    } else {
+        return false
+    }
 }
-this.byte_at_time = function(data){
-	key = new Buffer('00000000000000000000000000000000', 'hex');
-	uk = new Buffer('Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK','base64');
-	str = Buffer.concat([data,uk])
-	return this.aes128ECB_encrypt(str, key);
+this.byte_at_time = function(data) {
+    key = new Buffer('00000000000000000000000000000000', 'hex');
+    uk = new Buffer('Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK', 'base64');
+    str = Buffer.concat([data, uk])
+    return this.aes128ECB_encrypt(str, key);
 }
-this.byte_at_time_decryptor = function(data){
+this.byte_at_time_decryptor = function() {
+    b = new Buffer("");
+    text = "aaaaaaaaaaaaaaa"
+    c = "";
+    for (k = 0; k < 2; k++) {
+        a = new Buffer("");
+        for (w = 15; w > 0; w--) {
+            for (x = 0; x < 255; x++) {
 
-	new Buffer('a'.repeat(15)
-	for(i=0;i<16;i++){
-		byte_at_time(data).slice(0,16)
-	}
+                data1 = new Buffer(text.slice(0,w), 'ascii');
+                data2 = Buffer.concat([data1, a]);
+                val = Buffer([x]);
+                data = Buffer.concat([data2, val]);
+                res1 = this.byte_at_time(data).slice(k*16, k*16+16);
+                res2 = this.byte_at_time(data1).slice(k*16, k*16+16);
+                console.log(data.toString('ascii'))
+                if (Buffer.compare(res1, res2) == 0) {
+
+                    a = Buffer.concat([a, val]);
+                    x = 255;
+
+                }
+
+            }
+
+        }
+        text= a.toString('ascii')
+        b = Buffer.concat([b, a]);
+    }
+    return b
 }
