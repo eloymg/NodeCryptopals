@@ -160,23 +160,32 @@ this.byte_at_time = function(data) {
 }
 this.byte_at_time_decryptor = function() {
     b = new Buffer("");
-    text = "aaaaaaaaaaaaaaa"
+    text = "aaaaaaaaaaaaaaaa"
     c = "";
-    for (k = 0; k < 2; k++) {
+    blo=this.byte_at_time(new Buffer("","ascii")).length/16
+    
+    for (k = 0; k < blo; k++) {
         a = new Buffer("");
-        for (w = 15; w > 0; w--) {
+        for (w = 0; w < 16; w++) {
             for (x = 0; x < 255; x++) {
 
-                data1 = new Buffer(text.slice(0,w), 'ascii');
+                data1 = new Buffer(text.slice(0+w,15), 'ascii');
+               
                 data2 = Buffer.concat([data1, a]);
+                
                 val = Buffer([x]);
                 data = Buffer.concat([data2, val]);
-                res1 = this.byte_at_time(data).slice(k*16, k*16+16);
+                
+
+                res1 = this.byte_at_time(data).slice(0, 16);
+                
                 res2 = this.byte_at_time(data1).slice(k*16, k*16+16);
-                console.log(data.toString('ascii'))
+               
+                
                 if (Buffer.compare(res1, res2) == 0) {
 
                     a = Buffer.concat([a, val]);
+                    
                     x = 255;
 
                 }
@@ -184,8 +193,9 @@ this.byte_at_time_decryptor = function() {
             }
 
         }
-        text= a.toString('ascii')
-        b = Buffer.concat([b, a]);
+        text= a.toString('ascii').slice(1,16)
+        
+        b = Buffer.concat([b, a])
     }
     return b
 }
